@@ -1001,9 +1001,9 @@ section {
 }
 
 /* ===== PROJECTS SECTION ===== */
-#projects {transparent
+#projects {
     padding: 80px 0;
-    background: var(--bg-dark);
+    background: transparent;
     min-height: 100vh;
 }
 
