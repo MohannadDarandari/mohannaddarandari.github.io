@@ -996,6 +996,73 @@ section {
     transform: translateY(0);
 }
 
+/* ===== CERTIFICATIONS SECTION ===== */
+.certifications-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 60px;
+}
+
+.cert-card {
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(120, 40, 200, 0.1) 100%);
+    border: 2px solid rgba(0, 217, 255, 0.3);
+    border-radius: 20px;
+    padding: 30px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.cert-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent,
+        rgba(0, 217, 255, 0.1),
+        transparent
+    );
+    transform: rotate(45deg);
+    transition: all 0.5s ease;
+}
+
+.cert-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--primary);
+    box-shadow: 0 10px 30px rgba(0, 217, 255, 0.3);
+}
+
+.cert-card:hover::before {
+    left: 100%;
+}
+
+/* ===== PUBLICATIONS SECTION ===== */
+.publications-list {
+    max-width: 900px;
+    margin: 60px auto 0;
+}
+
+.publication-item {
+    background: rgba(0, 217, 255, 0.05);
+    border-left: 4px solid var(--primary);
+    padding: 30px;
+    margin-bottom: 30px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.publication-item:hover {
+    transform: translateX(10px);
+    box-shadow: -5px 5px 20px rgba(0, 217, 255, 0.2);
+    background: rgba(0, 217, 255, 0.1);
+}
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
     .hero-content,
