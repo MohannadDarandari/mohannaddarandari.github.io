@@ -999,6 +999,13 @@ section {
     transform: translateY(0);
 }
 
+/* ===== PROJECTS SECTION ===== */
+#projects {
+    padding: 80px 0;
+    background: var(--bg-dark);
+    min-height: 100vh;
+}
+
 /* ===== CERTIFICATIONS SECTION ===== */
 .certifications-grid {
     display: grid;
