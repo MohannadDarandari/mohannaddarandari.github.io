@@ -11,6 +11,9 @@
     --darker: #050505;
     --light: #ffffff;
     --gray: #a0a0a0;
+    --bg-dark: #0a0a0a;
+    --bg-light: #1a1a1a;
+    --text-muted: #a0a0a0;
     --shadow-1: 0 10px 30px rgba(0, 217, 255, 0.3);
     --shadow-2: 0 10px 30px rgba(255, 107, 107, 0.3);
 }
