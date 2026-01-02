@@ -1138,3 +1138,8 @@ section {
         grid-template-columns: 1fr;
     }
 }
+/* Projects Section */
+#projects {
+    padding: 80px 0;
+    background: var(--bg-dark);
+}
