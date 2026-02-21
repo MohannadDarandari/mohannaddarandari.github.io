@@ -63,10 +63,10 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 // ===== TYPING ANIMATION =====
 const typingTexts = [
     'AI Engineer',
-    'Machine Learning Architect',
-    'Automation Specialist',
-    'RAG Systems Expert',
-    'LLM Engineer'
+    'LLM & RAG Systems Builder',
+    'Automation Engineer',
+    'MCP Platform Developer',
+    'RPA Specialist'
 ];
 
 let textIndex = 0;
