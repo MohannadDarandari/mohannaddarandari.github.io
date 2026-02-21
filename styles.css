@@ -571,13 +571,16 @@ section {
     flex-wrap: wrap;
 }
 
-.tech-icon {
+a.tech-icon {
     font-size: 3rem;
     transition: all 0.3s ease;
     cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    display: inline-block;
 }
 
-.tech-icon:hover {
+a.tech-icon:hover {
     transform: scale(1.2) rotate(5deg);
 }
 
