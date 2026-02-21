@@ -41,70 +41,137 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- ===== SPLASH SCREEN ===== -->
-    <div id="splash" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:999999;background:#030014;display:flex;align-items:center;justify-content:center;overflow:hidden;margin:0;padding:0">
-        <canvas id="splashCanvas" style="position:absolute;top:0;left:0;width:100%;height:100%"></canvas>
-        <div style="position:relative;z-index:2;text-align:center">
-            <div id="splashRings" style="width:140px;height:140px;margin:0 auto 35px;position:relative"></div>
-            <h2 style="font-family:'Orbitron',sans-serif;font-size:2.2rem;font-weight:900;letter-spacing:10px;background:linear-gradient(135deg,#00D9FF,#FF6B6B,#FFE66D);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin:0 0 12px">MOHANNAD</h2>
-            <div id="splashLine" style="width:0;height:2px;margin:0 auto 12px;background:linear-gradient(90deg,transparent,#00D9FF,#FF6B6B,#FFE66D,transparent)"></div>
-            <p style="font-family:'Fira Code',monospace;font-size:.85rem;color:rgba(255,255,255,.4);letter-spacing:5px;margin:0 0 30px;opacity:0" id="splashRole">AI ENGINEER</p>
-            <div style="width:220px;height:3px;background:rgba(255,255,255,.08);border-radius:10px;margin:0 auto 14px;overflow:hidden">
-                <div id="splashBar" style="width:0%;height:100%;border-radius:10px;background:linear-gradient(90deg,#00D9FF,#FF6B6B,#FFE66D);box-shadow:0 0 12px rgba(0,217,255,.5);transition:width .15s ease"></div>
+    <!-- ===== FUTURISTIC SPLASH ===== -->
+    <div id="splash" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:999999;background:#000;display:flex;align-items:center;justify-content:center;overflow:hidden;margin:0;padding:0">
+        <canvas id="sC" style="position:absolute;top:0;left:0;width:100%;height:100%"></canvas>
+        <div style="position:relative;z-index:2;text-align:center;width:100%;max-width:500px;padding:0 20px">
+            <!-- Hexagonal Core -->
+            <div id="hexCore" style="width:160px;height:160px;margin:0 auto 40px;position:relative"></div>
+            <!-- Glitch Name -->
+            <div style="position:relative;margin:0 0 8px;overflow:hidden;height:50px;display:flex;align-items:center;justify-content:center">
+                <h2 id="sName" style="font-family:'Orbitron',sans-serif;font-size:2.4rem;font-weight:900;letter-spacing:14px;color:#fff;margin:0;position:relative">MOHANNAD</h2>
             </div>
-            <p id="splashStatus" style="font-family:'Fira Code',monospace;font-size:.7rem;color:rgba(255,255,255,.25);letter-spacing:1px;margin:0">Initializing...</p>
+            <!-- Scanning Line -->
+            <div style="width:260px;height:1px;margin:0 auto 30px;position:relative;overflow:hidden;background:rgba(255,255,255,.05)">
+                <div id="scanLine" style="position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,#00D9FF,#FF6B6B,transparent)"></div>
+            </div>
+            <!-- Percentage Counter -->
+            <div style="margin:0 0 20px">
+                <span id="sPct" style="font-family:'Orbitron',sans-serif;font-size:4rem;font-weight:900;background:linear-gradient(180deg,#00D9FF,#0066ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1">0</span>
+                <span style="font-family:'Orbitron',sans-serif;font-size:1.2rem;font-weight:700;color:rgba(0,217,255,.5);vertical-align:super">%</span>
+            </div>
+            <!-- Progress Arc Bar -->
+            <div style="width:280px;height:4px;margin:0 auto 16px;position:relative;border-radius:20px;background:rgba(255,255,255,.04)">
+                <div id="sBar" style="width:0%;height:100%;border-radius:20px;background:linear-gradient(90deg,#00D9FF,#0066ff,#FF6B6B);box-shadow:0 0 20px rgba(0,217,255,.4),0 0 60px rgba(0,217,255,.1);transition:width .12s linear"></div>
+                <div id="sGlow" style="position:absolute;top:-8px;width:20px;height:20px;border-radius:50%;background:radial-gradient(circle,rgba(0,217,255,.6),transparent);left:0%;transition:left .12s linear;filter:blur(4px)"></div>
+            </div>
+            <!-- Status -->
+            <p id="sStat" style="font-family:'Fira Code',monospace;font-size:.65rem;color:rgba(255,255,255,.2);letter-spacing:2px;margin:0;text-transform:uppercase">[ SYSTEM BOOT ]</p>
         </div>
     </div>
     <script>
     (function(){
-        // Rings via JS (CSS animations need a style tag)
-        var s=document.createElement('style');
-        s.textContent='@keyframes sp{to{transform:rotate(360deg)}}#splashRings>div{position:absolute;top:0;left:0;right:0;bottom:0;border-radius:50%;border:2px solid transparent}#r1{border-top-color:#00D9FF;border-bottom-color:#00D9FF;animation:sp 1.8s linear infinite}#r2{top:12px;left:12px;right:12px;bottom:12px;border-left-color:#FF6B6B;border-right-color:#FF6B6B;animation:sp 1.4s linear infinite reverse}#r3{top:24px;left:24px;right:24px;bottom:24px;border-top-color:#FFE66D;border-bottom-color:#FFE66D;animation:sp 1s linear infinite}#rCore{position:absolute;top:36px;left:36px;right:36px;bottom:36px;border-radius:50%;background:rgba(0,217,255,.08);display:flex;align-items:center;justify-content:center}#rCore span{font-family:"Fira Code",monospace;font-size:1.4rem;font-weight:700;color:#00D9FF}';
-        document.head.appendChild(s);
-        var rDiv=document.getElementById('splashRings');
-        rDiv.innerHTML='<div id="r1"></div><div id="r2"></div><div id="r3"></div><div id="rCore"><span>&lt;/&gt;</span></div>';
+        // Inject keyframes
+        var st=document.createElement('style');
+        st.textContent='@keyframes hexSpin{to{transform:rotate(360deg)}}@keyframes hexSpinR{to{transform:rotate(-360deg)}}@keyframes pulseCore{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.8}50%{transform:translate(-50%,-50%) scale(1.15);opacity:1}}@keyframes scanAnim{0%{left:-100%}100%{left:100%}}@keyframes glitch1{0%,100%{clip-path:inset(0 0 0 0)}20%{clip-path:inset(20% 0 60% 0);transform:translate(-3px,0)}40%{clip-path:inset(60% 0 10% 0);transform:translate(3px,0)}60%{clip-path:inset(40% 0 30% 0);transform:translate(-2px,0)}80%{clip-path:inset(10% 0 70% 0);transform:translate(2px,0)}}@keyframes dataStream{0%{transform:translateY(-100%);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateY(100vh);opacity:0}}#scanLine{animation:scanAnim 2s linear infinite}'
+        document.head.appendChild(st);
 
-        // Animate line + role
-        setTimeout(function(){document.getElementById('splashLine').style.transition='width 1.2s ease';document.getElementById('splashLine').style.width='180px';},100);
-        setTimeout(function(){var r=document.getElementById('splashRole');r.style.transition='opacity .6s ease,transform .6s ease';r.style.opacity='1';r.style.transform='translateY(0)';},800);
+        // Hexagonal Core
+        var hex=document.getElementById('hexCore');
+        var svg='<svg viewBox="0 0 160 160" style="width:100%;height:100%;position:absolute;top:0;left:0">';
+        // Outer hex ring
+        svg+='<polygon points="80,5 145,42.5 145,117.5 80,155 15,117.5 15,42.5" fill="none" stroke="rgba(0,217,255,.15)" stroke-width="1" style="animation:hexSpin 8s linear infinite;transform-origin:center"/>';
+        // Middle hex ring  
+        svg+='<polygon points="80,20 130,50 130,110 80,140 30,110 30,50" fill="none" stroke="rgba(0,217,255,.3)" stroke-width="1.5" style="animation:hexSpinR 5s linear infinite;transform-origin:center"/>';
+        // Inner hex
+        svg+='<polygon points="80,38 115,58.5 115,101.5 80,122 45,101.5 45,58.5" fill="rgba(0,217,255,.03)" stroke="#00D9FF" stroke-width="2" style="animation:hexSpin 3s linear infinite;transform-origin:center;filter:drop-shadow(0 0 8px rgba(0,217,255,.4))"/>';
+        // Decorative lines
+        for(var i=0;i<6;i++){var a=Math.PI/3*i-Math.PI/2;var x1=80+35*Math.cos(a),y1=80+35*Math.sin(a),x2=80+70*Math.cos(a),y2=80+70*Math.sin(a);svg+='<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="rgba(0,217,255,.2)" stroke-width="1"/>';}
+        // Corner dots
+        for(var i=0;i<6;i++){var a=Math.PI/3*i-Math.PI/2;var cx=80+70*Math.cos(a),cy=80+70*Math.sin(a);svg+='<circle cx="'+cx+'" cy="'+cy+'" r="3" fill="#00D9FF" style="opacity:.6"><animate attributeName="opacity" values=".3;1;.3" dur="'+(1+i*.3)+'s" repeatCount="indefinite"/></circle>';}
+        svg+='</svg>';
+        // Center "MD"
+        hex.innerHTML=svg+'<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);animation:pulseCore 3s ease-in-out infinite"><span style="font-family:Orbitron,sans-serif;font-size:1.8rem;font-weight:900;color:#00D9FF;text-shadow:0 0 20px rgba(0,217,255,.5),0 0 40px rgba(0,217,255,.2)">MD</span></div>';
 
-        // Canvas particles
-        var c=document.getElementById('splashCanvas'),x=c.getContext('2d'),pts=[];
-        function sz(){c.width=innerWidth;c.height=innerHeight;pts=[];for(var i=0;i<50;i++)pts.push({x:Math.random()*c.width,y:Math.random()*c.height,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4,r:Math.random()*1.5+.5});}
+        // Data streams (vertical falling lines)
+        var sp=document.getElementById('splash');
+        for(var i=0;i<12;i++){
+            var d=document.createElement('div');
+            d.style.cssText='position:absolute;top:0;width:1px;height:'+(60+Math.random()*80)+'px;background:linear-gradient(180deg,transparent,rgba(0,217,255,.15),transparent);left:'+(Math.random()*100)+'%;animation:dataStream '+(3+Math.random()*4)+'s linear '+(Math.random()*3)+'s infinite;opacity:0;z-index:1';
+            sp.appendChild(d);
+        }
+
+        // Glitch effect on name
+        var nm=document.getElementById('sName');
+        setInterval(function(){
+            nm.style.textShadow='2px 0 #FF6B6B,-2px 0 #00D9FF';
+            nm.style.animation='glitch1 .15s linear';
+            setTimeout(function(){nm.style.textShadow='none';nm.style.animation='none';},150);
+        },3000);
+
+        // Canvas — cyber grid + particles
+        var c=document.getElementById('sC'),ctx=c.getContext('2d'),pts=[];
+        function sz(){
+            c.width=innerWidth;c.height=innerHeight;pts=[];
+            for(var i=0;i<70;i++)pts.push({x:Math.random()*c.width,y:Math.random()*c.height,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:Math.random()*1.8+.3,pulse:Math.random()*6.28});
+        }
         sz();window.addEventListener('resize',sz);
-        var raf;
+        var raf,t=0;
         function draw(){
-            x.clearRect(0,0,c.width,c.height);
-            for(var i=0;i<pts.length;i++){var p=pts[i];p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>c.width)p.vx*=-1;if(p.y<0||p.y>c.height)p.vy*=-1;
-            x.beginPath();x.arc(p.x,p.y,p.r,0,6.28);x.fillStyle='rgba(0,217,255,'+(0.15+Math.sin(Date.now()*.002+i)*.1)+')';x.fill();
-            for(var j=i+1;j<pts.length;j++){var d=Math.hypot(pts[i].x-pts[j].x,pts[i].y-pts[j].y);if(d<100){x.beginPath();x.moveTo(p.x,p.y);x.lineTo(pts[j].x,pts[j].y);x.strokeStyle='rgba(0,217,255,'+(0.08*(1-d/100))+')';x.stroke();}}}
+            ctx.clearRect(0,0,c.width,c.height);
+            t+=.005;
+            // Grid
+            ctx.strokeStyle='rgba(0,217,255,.03)';ctx.lineWidth=.5;
+            var gs=80;
+            for(var gx=0;gx<c.width;gx+=gs){ctx.beginPath();ctx.moveTo(gx,0);ctx.lineTo(gx,c.height);ctx.stroke();}
+            for(var gy=0;gy<c.height;gy+=gs){ctx.beginPath();ctx.moveTo(0,gy);ctx.lineTo(c.width,gy);ctx.stroke();}
+            // Particles + connections
+            for(var i=0;i<pts.length;i++){
+                var p=pts[i];p.x+=p.vx;p.y+=p.vy;p.pulse+=.02;
+                if(p.x<0||p.x>c.width)p.vx*=-1;if(p.y<0||p.y>c.height)p.vy*=-1;
+                var al=.2+Math.sin(p.pulse)*.15;
+                ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,6.28);ctx.fillStyle='rgba(0,217,255,'+al+')';ctx.fill();
+                // Connections
+                for(var j=i+1;j<pts.length;j++){
+                    var dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);
+                    if(d<110){ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(pts[j].x,pts[j].y);ctx.strokeStyle='rgba(0,217,255,'+(0.06*(1-d/110))+')';ctx.lineWidth=.5;ctx.stroke();}
+                }
+            }
+            // Horizon glow
+            var grd=ctx.createRadialGradient(c.width/2,c.height/2,0,c.width/2,c.height/2,c.width*.4);
+            grd.addColorStop(0,'rgba(0,217,255,.04)');grd.addColorStop(1,'transparent');
+            ctx.fillStyle=grd;ctx.fillRect(0,0,c.width,c.height);
             raf=requestAnimationFrame(draw);
         }
         draw();
 
         // Progress
-        var pr=0,mi=0,bar=document.getElementById('splashBar'),stat=document.getElementById('splashStatus'),sp=document.getElementById('splash');
-        var msgs=['Initializing...','Loading modules...','Building interface...','Connecting nodes...','Almost ready...','Welcome.'];
+        var pr=0,mi=0,bar=document.getElementById('sBar'),glow=document.getElementById('sGlow'),pct=document.getElementById('sPct'),stat=document.getElementById('sStat'),splash=document.getElementById('splash');
+        var msgs=['[ SYSTEM BOOT ]','[ LOADING CORE ]','[ NEURAL SYNC ]','[ RENDERING ]','[ FINALIZING ]','[ COMPLETE ]'];
         function tick(){
-            pr=Math.min(pr+Math.random()*3+.5,92);
-            bar.style.width=pr+'%';
+            pr=Math.min(pr+Math.random()*2.5+.3,92);
+            bar.style.width=pr+'%';glow.style.left=pr+'%';
+            pct.textContent=Math.floor(pr);
             var ni=Math.min(Math.floor(pr/18),msgs.length-2);
             if(ni!==mi){mi=ni;stat.textContent=msgs[mi];}
-            if(pr<92)setTimeout(tick,40+Math.random()*60);
+            if(pr<92)setTimeout(tick,50+Math.random()*70);
         }
         tick();
 
         window.addEventListener('load',function(){
             function fin(){
-                pr+=4;if(pr>100)pr=100;bar.style.width=pr+'%';
+                pr+=3;if(pr>100)pr=100;bar.style.width=pr+'%';glow.style.left=Math.min(pr,98)+'%';pct.textContent=Math.floor(pr);
                 if(pr<100){requestAnimationFrame(fin);}
-                else{stat.textContent='Welcome.';setTimeout(function(){
-                    sp.style.transition='opacity .6s ease';sp.style.opacity='0';
-                    cancelAnimationFrame(raf);
-                    setTimeout(function(){sp.parentNode.removeChild(sp);},700);
-                },500);}
+                else{
+                    stat.textContent=msgs[msgs.length-1];
+                    setTimeout(function(){
+                        splash.style.transition='opacity .8s cubic-bezier(.4,0,.2,1)';splash.style.opacity='0';
+                        cancelAnimationFrame(raf);
+                        setTimeout(function(){splash.parentNode.removeChild(splash);},900);
+                    },600);
+                }
             }
-            setTimeout(fin,200);
+            setTimeout(fin,250);
         });
     })();
     </script>
