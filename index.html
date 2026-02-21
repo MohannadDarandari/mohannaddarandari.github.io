@@ -41,6 +41,28 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- ===== EPIC PRELOADER ===== -->
+    <div class="preloader" id="preloader">
+        <canvas id="preloaderCanvas"></canvas>
+        <div class="preloader-content">
+            <div class="preloader-brain">
+                <div class="brain-ring ring-1"></div>
+                <div class="brain-ring ring-2"></div>
+                <div class="brain-ring ring-3"></div>
+                <div class="brain-core">
+                    <span>&lt;/&gt;</span>
+                </div>
+            </div>
+            <h2 class="preloader-name">MOHANNAD</h2>
+            <div class="preloader-line"></div>
+            <p class="preloader-role">AI ENGINEER</p>
+            <div class="preloader-bar">
+                <div class="preloader-bar-fill" id="preloaderBar"></div>
+            </div>
+            <p class="preloader-status" id="preloaderStatus">Initializing...</p>
+        </div>
+    </div>
+
     <!-- Animated Background -->
     <div class="animated-background">
         <div class="stars"></div>
@@ -1160,5 +1182,36 @@
 
     <!-- Custom JavaScript -->
     <script src="script.js" defer></script>
+    <script>
+    // ===== PRELOADER ENGINE (runs immediately) =====
+    (function(){
+        var c=document.getElementById('preloaderCanvas'),x=c.getContext('2d'),pts=[],pr=0;
+        var bar=document.getElementById('preloaderBar'),stat=document.getElementById('preloaderStatus'),pl=document.getElementById('preloader');
+        var msgs=['Initializing...','Loading modules...','Building interface...','Connecting nodes...','Almost ready...','Welcome.'];
+        function sz(){c.width=innerWidth;c.height=innerHeight;pts=[];for(var i=0;i<50;i++)pts.push({x:Math.random()*c.width,y:Math.random()*c.height,vx:(Math.random()-0.5)*0.4,vy:(Math.random()-0.5)*0.4,r:Math.random()*1.5+0.5});}
+        sz();window.addEventListener('resize',sz);
+        function draw(){
+            x.clearRect(0,0,c.width,c.height);
+            for(var i=0;i<pts.length;i++){var p=pts[i];p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>c.width)p.vx*=-1;if(p.y<0||p.y>c.height)p.vy*=-1;
+            x.beginPath();x.arc(p.x,p.y,p.r,0,6.28);x.fillStyle='rgba(0,217,255,'+(0.15+Math.sin(Date.now()*0.002+i)*0.1)+')';x.fill();
+            for(var j=i+1;j<pts.length;j++){var d=Math.hypot(pts[i].x-pts[j].x,pts[i].y-pts[j].y);if(d<100){x.beginPath();x.moveTo(p.x,p.y);x.lineTo(pts[j].x,pts[j].y);x.strokeStyle='rgba(0,217,255,'+(0.08*(1-d/100))+')';x.stroke();}}}
+            if(!pl.classList.contains('done'))requestAnimationFrame(draw);
+        }
+        draw();
+        var mi=0;
+        function tick(){
+            pr=Math.min(pr+Math.random()*3+0.5,92);
+            bar.style.width=pr+'%';
+            var ni=Math.min(Math.floor(pr/18),msgs.length-2);
+            if(ni!==mi){mi=ni;stat.textContent=msgs[mi];}
+            if(pr<92)setTimeout(tick,40+Math.random()*60);
+        }
+        tick();
+        window.addEventListener('load',function(){
+            function fin(){pr+=4;if(pr>100)pr=100;bar.style.width=pr+'%';if(pr<100){requestAnimationFrame(fin);}else{stat.textContent=msgs[msgs.length-1];setTimeout(function(){pl.classList.add('done');},500);}}
+            setTimeout(fin,200);
+        });
+    })();
+    </script>
 </body>
 </html>
