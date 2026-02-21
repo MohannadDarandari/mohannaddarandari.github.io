@@ -210,7 +210,7 @@ filterButtons.forEach(button => {
     });
 });
 
-// ===== FORM VALIDATION =====
+// ===== FORM VALIDATION & MAILTO =====
 const contactForm = document.querySelector('.contact-form');
 
 if (contactForm) {
@@ -219,10 +219,11 @@ if (contactForm) {
 
         const name = document.getElementById('name').value.trim();
         const email = document.getElementById('email').value.trim();
+        const subject = document.getElementById('subject').value.trim();
         const message = document.getElementById('message').value.trim();
 
         // Basic validation
-        if (name === '' || email === '' || message === '') {
+        if (name === '' || email === '' || subject === '' || message === '') {
             alert('Please fill in all fields!');
             return;
         }
@@ -234,9 +235,21 @@ if (contactForm) {
             return;
         }
 
-        // Success message (you can integrate with a backend here)
-        alert('Thank you for your message! I will get back to you soon.');
-        contactForm.reset();
+        // Open email client with pre-filled data
+        const mailtoBody = `Name: ${name}%0AEmail: ${email}%0A%0A${encodeURIComponent(message)}`;
+        const mailtoLink = `mailto:mohannad.ai@ieee.org?subject=${encodeURIComponent(subject)}&body=${mailtoBody}`;
+        window.open(mailtoLink, '_blank');
+        
+        // Show success & reset
+        const btn = contactForm.querySelector('button[type="submit"]');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-check"></i> Opening Email Client...';
+        btn.style.background = 'var(--secondary)';
+        setTimeout(() => {
+            btn.innerHTML = originalText;
+            btn.style.background = '';
+            contactForm.reset();
+        }, 3000);
     });
 }
 
