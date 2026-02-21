@@ -477,22 +477,3 @@ document.addEventListener('mousemove', (e) => {
 console.log('%c🚀 Welcome to Mohannad Darandari Portfolio!', 'color: #00D9FF; font-size: 20px; font-weight: bold;');
 console.log('%c Built with ❤️ in 2026', 'color: #FF6B6B; font-size: 14px;');
 console.log('%c Interested in collaborating? Let\'s connect!', 'color: #FFE66D; font-size: 14px;');
-
-// ===== PERFORMANCE OPTIMIZATION =====
-// Lazy load images
-if ('IntersectionObserver' in window) {
-    const imageObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const img = entry.target;
-                img.src = img.dataset.src;
-                img.classList.add('loaded');
-                observer.unobserve(img);
-            }
-        });
-    });
-
-    document.querySelectorAll('img[data-src]').forEach(img => {
-        imageObserver.observe(img);
-    });
-}
