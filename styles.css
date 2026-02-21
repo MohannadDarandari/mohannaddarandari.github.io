@@ -991,18 +991,6 @@ section {
     box-shadow: var(--shadow-1);
 }
 
-/* ===== FADE IN ANIMATION ===== */
-.fade-in {
-    opacity: 0;
-    transform: translateY(40px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
-}
-
-.fade-in.visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-
 /* ===== PROJECTS SECTION ===== */
 #projects {
     padding: 80px 0;

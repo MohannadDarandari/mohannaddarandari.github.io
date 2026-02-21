@@ -128,55 +128,25 @@ function animateCounter(element, target) {
     }, stepTime);
 }
 
-// ===== INTERSECTION OBSERVER FOR ANIMATIONS =====
-const observerOptions = {
-    threshold: 0.3,
-    rootMargin: '0px 0px -100px 0px'
-};
-
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-
-            // Animate counters
-            if (entry.target.classList.contains('stat-item')) {
-                const counterElement = entry.target.querySelector('h3');
-                if (counterElement && !counterElement.classList.contains('counted')) {
-                    counterElement.classList.add('counted');
-                    const targetValue = parseInt(counterElement.textContent);
-                    animateCounter(counterElement, targetValue);
-                }
-            }
-
-            // Animate skill bars
-            if (entry.target.classList.contains('skill-item')) {
-                const progressBar = entry.target.querySelector('.skill-progress');
-                const percentage = entry.target.querySelector('.skill-percentage').textContent;
-                if (progressBar) {
-                    progressBar.style.width = percentage;
-                }
-            }
+// ===== ANIMATE COUNTERS & SKILL BARS ON LOAD =====
+document.addEventListener('DOMContentLoaded', () => {
+    // Animate counters immediately
+    document.querySelectorAll('.stat-item').forEach(item => {
+        const counterElement = item.querySelector('h3');
+        if (counterElement) {
+            const targetValue = parseInt(counterElement.textContent);
+            animateCounter(counterElement, targetValue);
         }
     });
-}, observerOptions);
 
-// Observe all fade-in elements
-document.addEventListener('DOMContentLoaded', () => {
-    // Add fade-in class to sections
-    const sections = document.querySelectorAll('section > .container');
-    sections.forEach(section => {
-        section.classList.add('fade-in');
-        observer.observe(section);
+    // Animate skill bars immediately
+    document.querySelectorAll('.skill-item').forEach(item => {
+        const progressBar = item.querySelector('.skill-progress');
+        const percentage = item.querySelector('.skill-percentage').textContent;
+        if (progressBar) {
+            progressBar.style.width = percentage;
+        }
     });
-
-    // Observe stat items
-    const statItems = document.querySelectorAll('.stat-item');
-    statItems.forEach(item => observer.observe(item));
-
-    // Observe skill items
-    const skillItems = document.querySelectorAll('.skill-item');
-    skillItems.forEach(item => observer.observe(item));
 });
 
 // ===== PROJECT FILTERING =====
