@@ -39,63 +39,71 @@
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="styles.css">
-    <!-- Preloader Critical CSS (must load before anything paints) -->
-    <style>
-        .preloader{position:fixed;top:0;left:0;width:100%;height:100%;z-index:999999;background:#030014;display:flex;align-items:center;justify-content:center;overflow:hidden;transition:opacity .6s,visibility .6s}
-        .preloader.done{opacity:0;visibility:hidden;pointer-events:none}
-        #preloaderCanvas{position:absolute;top:0;left:0;width:100%;height:100%}
-        .preloader-content{position:relative;z-index:2;text-align:center}
-    </style>
 </head>
 <body>
-    <!-- ===== EPIC PRELOADER ===== -->
-    <div class="preloader" id="preloader">
-        <canvas id="preloaderCanvas"></canvas>
-        <div class="preloader-content">
-            <div class="preloader-brain">
-                <div class="brain-ring ring-1"></div>
-                <div class="brain-ring ring-2"></div>
-                <div class="brain-ring ring-3"></div>
-                <div class="brain-core">
-                    <span>&lt;/&gt;</span>
-                </div>
+    <!-- ===== SPLASH SCREEN ===== -->
+    <div id="splash" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:999999;background:#030014;display:flex;align-items:center;justify-content:center;overflow:hidden;margin:0;padding:0">
+        <canvas id="splashCanvas" style="position:absolute;top:0;left:0;width:100%;height:100%"></canvas>
+        <div style="position:relative;z-index:2;text-align:center">
+            <div id="splashRings" style="width:140px;height:140px;margin:0 auto 35px;position:relative"></div>
+            <h2 style="font-family:'Orbitron',sans-serif;font-size:2.2rem;font-weight:900;letter-spacing:10px;background:linear-gradient(135deg,#00D9FF,#FF6B6B,#FFE66D);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin:0 0 12px">MOHANNAD</h2>
+            <div id="splashLine" style="width:0;height:2px;margin:0 auto 12px;background:linear-gradient(90deg,transparent,#00D9FF,#FF6B6B,#FFE66D,transparent)"></div>
+            <p style="font-family:'Fira Code',monospace;font-size:.85rem;color:rgba(255,255,255,.4);letter-spacing:5px;margin:0 0 30px;opacity:0" id="splashRole">AI ENGINEER</p>
+            <div style="width:220px;height:3px;background:rgba(255,255,255,.08);border-radius:10px;margin:0 auto 14px;overflow:hidden">
+                <div id="splashBar" style="width:0%;height:100%;border-radius:10px;background:linear-gradient(90deg,#00D9FF,#FF6B6B,#FFE66D);box-shadow:0 0 12px rgba(0,217,255,.5);transition:width .15s ease"></div>
             </div>
-            <h2 class="preloader-name">MOHANNAD</h2>
-            <div class="preloader-line"></div>
-            <p class="preloader-role">AI ENGINEER</p>
-            <div class="preloader-bar">
-                <div class="preloader-bar-fill" id="preloaderBar"></div>
-            </div>
-            <p class="preloader-status" id="preloaderStatus">Initializing...</p>
+            <p id="splashStatus" style="font-family:'Fira Code',monospace;font-size:.7rem;color:rgba(255,255,255,.25);letter-spacing:1px;margin:0">Initializing...</p>
         </div>
     </div>
     <script>
-    // Preloader engine - runs immediately after preloader HTML
     (function(){
-        var c=document.getElementById('preloaderCanvas'),x=c.getContext('2d'),pts=[],pr=0;
-        var bar=document.getElementById('preloaderBar'),stat=document.getElementById('preloaderStatus'),pl=document.getElementById('preloader');
-        var msgs=['Initializing...','Loading modules...','Building interface...','Connecting nodes...','Almost ready...','Welcome.'];
-        function sz(){c.width=innerWidth;c.height=innerHeight;pts=[];for(var i=0;i<50;i++)pts.push({x:Math.random()*c.width,y:Math.random()*c.height,vx:(Math.random()-0.5)*0.4,vy:(Math.random()-0.5)*0.4,r:Math.random()*1.5+0.5});}
+        // Rings via JS (CSS animations need a style tag)
+        var s=document.createElement('style');
+        s.textContent='@keyframes sp{to{transform:rotate(360deg)}}#splashRings>div{position:absolute;top:0;left:0;right:0;bottom:0;border-radius:50%;border:2px solid transparent}#r1{border-top-color:#00D9FF;border-bottom-color:#00D9FF;animation:sp 1.8s linear infinite}#r2{top:12px;left:12px;right:12px;bottom:12px;border-left-color:#FF6B6B;border-right-color:#FF6B6B;animation:sp 1.4s linear infinite reverse}#r3{top:24px;left:24px;right:24px;bottom:24px;border-top-color:#FFE66D;border-bottom-color:#FFE66D;animation:sp 1s linear infinite}#rCore{position:absolute;top:36px;left:36px;right:36px;bottom:36px;border-radius:50%;background:rgba(0,217,255,.08);display:flex;align-items:center;justify-content:center}#rCore span{font-family:"Fira Code",monospace;font-size:1.4rem;font-weight:700;color:#00D9FF}';
+        document.head.appendChild(s);
+        var rDiv=document.getElementById('splashRings');
+        rDiv.innerHTML='<div id="r1"></div><div id="r2"></div><div id="r3"></div><div id="rCore"><span>&lt;/&gt;</span></div>';
+
+        // Animate line + role
+        setTimeout(function(){document.getElementById('splashLine').style.transition='width 1.2s ease';document.getElementById('splashLine').style.width='180px';},100);
+        setTimeout(function(){var r=document.getElementById('splashRole');r.style.transition='opacity .6s ease,transform .6s ease';r.style.opacity='1';r.style.transform='translateY(0)';},800);
+
+        // Canvas particles
+        var c=document.getElementById('splashCanvas'),x=c.getContext('2d'),pts=[];
+        function sz(){c.width=innerWidth;c.height=innerHeight;pts=[];for(var i=0;i<50;i++)pts.push({x:Math.random()*c.width,y:Math.random()*c.height,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4,r:Math.random()*1.5+.5});}
         sz();window.addEventListener('resize',sz);
+        var raf;
         function draw(){
             x.clearRect(0,0,c.width,c.height);
             for(var i=0;i<pts.length;i++){var p=pts[i];p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>c.width)p.vx*=-1;if(p.y<0||p.y>c.height)p.vy*=-1;
-            x.beginPath();x.arc(p.x,p.y,p.r,0,6.28);x.fillStyle='rgba(0,217,255,'+(0.15+Math.sin(Date.now()*0.002+i)*0.1)+')';x.fill();
+            x.beginPath();x.arc(p.x,p.y,p.r,0,6.28);x.fillStyle='rgba(0,217,255,'+(0.15+Math.sin(Date.now()*.002+i)*.1)+')';x.fill();
             for(var j=i+1;j<pts.length;j++){var d=Math.hypot(pts[i].x-pts[j].x,pts[i].y-pts[j].y);if(d<100){x.beginPath();x.moveTo(p.x,p.y);x.lineTo(pts[j].x,pts[j].y);x.strokeStyle='rgba(0,217,255,'+(0.08*(1-d/100))+')';x.stroke();}}}
-            if(!pl.classList.contains('done'))requestAnimationFrame(draw);
+            raf=requestAnimationFrame(draw);
         }
         draw();
-        var mi=0;
+
+        // Progress
+        var pr=0,mi=0,bar=document.getElementById('splashBar'),stat=document.getElementById('splashStatus'),sp=document.getElementById('splash');
+        var msgs=['Initializing...','Loading modules...','Building interface...','Connecting nodes...','Almost ready...','Welcome.'];
         function tick(){
-            pr=Math.min(pr+Math.random()*3+0.5,92);
+            pr=Math.min(pr+Math.random()*3+.5,92);
             bar.style.width=pr+'%';
             var ni=Math.min(Math.floor(pr/18),msgs.length-2);
             if(ni!==mi){mi=ni;stat.textContent=msgs[mi];}
             if(pr<92)setTimeout(tick,40+Math.random()*60);
         }
         tick();
+
         window.addEventListener('load',function(){
-            function fin(){pr+=4;if(pr>100)pr=100;bar.style.width=pr+'%';if(pr<100){requestAnimationFrame(fin);}else{stat.textContent=msgs[msgs.length-1];setTimeout(function(){pl.classList.add('done');setTimeout(function(){pl.parentNode.removeChild(pl);},600);},500);}}
+            function fin(){
+                pr+=4;if(pr>100)pr=100;bar.style.width=pr+'%';
+                if(pr<100){requestAnimationFrame(fin);}
+                else{stat.textContent='Welcome.';setTimeout(function(){
+                    sp.style.transition='opacity .6s ease';sp.style.opacity='0';
+                    cancelAnimationFrame(raf);
+                    setTimeout(function(){sp.parentNode.removeChild(sp);},700);
+                },500);}
+            }
             setTimeout(fin,200);
         });
     })();
