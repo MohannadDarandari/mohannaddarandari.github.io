@@ -5,16 +5,12 @@
 
 :root {
     --primary: #00D9FF;
-    --primary-rgb: 0, 217, 255;
     --secondary: #FF6B6B;
     --accent: #FFE66D;
     --dark: #0a0a0a;
     --darker: #050505;
     --light: #ffffff;
     --gray: #a0a0a0;
-    --bg-dark: #0d0d0d;
-    --bg-light: #1a1a1a;
-    --text-muted: #888888;
     --shadow-1: 0 10px 30px rgba(0, 217, 255, 0.3);
     --shadow-2: 0 10px 30px rgba(255, 107, 107, 0.3);
 }
@@ -571,16 +567,13 @@ section {
     flex-wrap: wrap;
 }
 
-a.tech-icon {
+.tech-icon {
     font-size: 3rem;
     transition: all 0.3s ease;
     cursor: pointer;
-    text-decoration: none;
-    color: inherit;
-    display: inline-block;
 }
 
-a.tech-icon:hover {
+.tech-icon:hover {
     transform: scale(1.2) rotate(5deg);
 }
 
@@ -994,6 +987,18 @@ a.tech-icon:hover {
     box-shadow: var(--shadow-1);
 }
 
+/* ===== FADE IN ANIMATION ===== */
+.fade-in {
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.6s ease;
+}
+
+.fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 /* ===== PROJECTS SECTION ===== */
 #projects {
     padding: 80px 0;
@@ -1102,42 +1107,6 @@ a.tech-icon:hover {
         display: flex;
     }
 
-    .nav-menu.active {
-        display: flex;
-        flex-direction: column;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100%;
-        background: rgba(10, 10, 10, 0.98);
-        backdrop-filter: blur(20px);
-        padding: 20px 0;
-        border-top: 1px solid rgba(0, 217, 255, 0.2);
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        z-index: 999;
-    }
-
-    .nav-menu.active li {
-        text-align: center;
-        padding: 12px 0;
-    }
-
-    .nav-menu.active .nav-link {
-        font-size: 1.1rem;
-    }
-
-    .hamburger.active span:nth-child(1) {
-        transform: rotate(45deg) translate(5px, 5px);
-    }
-
-    .hamburger.active span:nth-child(2) {
-        opacity: 0;
-    }
-
-    .hamburger.active span:nth-child(3) {
-        transform: rotate(-45deg) translate(7px, -6px);
-    }
-
     .timeline::before {
         left: 20px;
     }
@@ -1178,4 +1147,9 @@ a.tech-icon:hover {
     .projects-grid {
         grid-template-columns: 1fr;
     }
+}
+/* Projects Section */
+#projects {
+    padding: 80px 0;
+    background: var(--bg-dark);
 }
